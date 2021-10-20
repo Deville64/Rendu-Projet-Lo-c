@@ -3,12 +3,16 @@
 def display(a , b):
     a = round(a)
     b = round(b)
+    string = ""
 
     while a < b:
         a+=1
-        print(a)
+        if a%2 == 1:
+            string = string + str(a) + " "
 
-#display( 1, 5)
+    print(string)
+
+#display( 1, 8)
 
 
 #Exercice 2
@@ -19,7 +23,7 @@ def game(x, y):
     computer = random.randint(x, y)
     count = 0
     test = False
-    x = int(input())
+    x = int(input("Devine un nombre : "))
 
     if  x > 100:
         print('Tu as choisi un chiffre plus grand que 100')
@@ -89,6 +93,7 @@ def custom_sort(list):
 
 #custom_sort(test)
 
+
 #Exercice 5
 x = 3430061596791935255
 
@@ -115,24 +120,43 @@ def convert_distance(miles):
 
 #convert_distance(121)
 
+
+#Exercice 6
+
+def pascal(row):
+    pascal = [[1],[1,1]]
+    print(pascal[0])
+    print(pascal[1])
+    
+    for i in range(2,row):
+        pascal.append([1])
+        for j in range(1, i):
+            pascal[i].append(pascal[i-1][j-1] + pascal[i-1][j])
+        pascal[i].append(1)
+        print(pascal[i])
+
+    print(f'Le max de la ligne {row} est {max(pascal[-1])}')
+
+#pascal(9)
+
+
 #Exercice 7
-word = {"souris": "mouse", "ordinateur": "computer", "miel": "honey"}
 
 def translate(mot):
+    word = {"souris": "mouse", "ordinateur": "computer", "miel": "honey"}
     for key, value in word.items():
         if mot == key:
             return print(value)
         elif mot == value:
             return print(key)
 
-#translate("computer")
+#translate("ordinateur")
+
 
 #Exercice 8
 def text():
-    print("Donner un nom à votre fichier")
-    x = input()
-    title = x
-    f =open( x + ".txt", "x")
+    title = "test"
+    f =open( title + ".txt", "x")
     
 
 
@@ -157,15 +181,12 @@ def text():
 #text()
 
 def school_work():
-    print("Donner un nom à votre fichier")
-    x = input()
-    title = x
-    f =open( x + ".txt", "x")
+    f =open( "school_work.txt", "x")
 
     for i in range(2,31):
         count = 1
         while count < 21:
-            if count == 10:
+            if count == 20:
                 result = i*count
                 text = f"{i}x{count}={result} \n"
 
@@ -181,6 +202,57 @@ def school_work():
                 count+=1
 
 #school_work()
+
+def triple_space(old_file, new_file, old, new):
+    file = open(old_file + ".txt", "r+")
+    f =open( new_file + ".txt", "x")
+    txt = file.readlines()
+    sentence = ''
+
+    for line in txt:
+        count = 0
+        while(count < len(line)):
+                if line[count] == old:
+                    sentence += new
+                else:
+                    sentence += line[count]
+                count += 1
+                
+        line = sentence
+        f.seek(0)
+        f.writelines(line)
+            
+    file.close()
+    f.close()
+
+#triple_space("test", "copie", " ", "   ")
+
+def mix_lines(file_a, file_b, new_file):
+    file = open(new_file + ".txt", "x")
+    f_a = open(file_a + ".txt", "r+")
+    f_b = open(file_b + ".txt", "r+")
+    sentence = ''
+
+    txt_a = f_a.readlines()
+    txt_b = f_b.readlines()
+
+    count = 0
+    while count < len(txt_a):
+        if count%2 == 0:  
+            sentence += txt_a[count]
+            count+=1
+        elif count%2 == 1:
+            sentence+= txt_b[count]
+            count+=1
+
+    print(sentence)
+    file.writelines(sentence)
+    file.close()
+    f_a.close()
+    f_b.close()
+
+#mix_lines("exo8_a", "exo8_b", "fichier_c")
+
 
 #Exercice 9
 
@@ -219,9 +291,10 @@ def note():
 
 #note()
 
+
 #Exercice 10
 
-def create_big_brother():
+def create_big_brother(data):
     dico = {}
             
     empty = False
@@ -241,12 +314,37 @@ def create_big_brother():
         size= input("Taille : ") 
         dico[name]["taille"] = size
 
-    send = dico
+    send = data.update(dico)
     return send
         
 def read_big_brother(dico):
     name = input("Quel personne cherchez-vous ? : ")
     print(f"Nom : {str(name)} - âge : {dico[str(name)]['age']} ans - sexe : {dico[str(name)]['taille']}m")
 
-#read_big_brother(create_big_brother())
 
+def save_big_brother(dico):
+    file = open("big_brother.txt", "x")
+    sentence = ''
+
+    for i in dico:
+        sentence += i + ": \n" + '    Age: ' + dico[i]['age'] + '\n' + '    Sexe: ' + dico[i]['sexe'] + '\n' + '    Taille: ' + dico[i]['taille'] + '\n'
+    
+    file.writelines(sentence)
+    file.close()
+    print("Fichier enregistré")
+
+def big_brother(data):
+    x = input("Désirez-vous chercher quelqu'un ? [y/n]")
+    if x == "y":
+        read_big_brother(data)
+    x = input("Désirez-vous ficher des personnes ? [y/n]")
+    if x == "y":
+        create_big_brother(data)
+    x = input("Voulez-vous enregistrer les data ? [y/n]")
+    if x == "y":
+        save_big_brother(data)
+
+
+test_dico = {'loic': {'age': '27', 'sexe': 'M', 'taille': '1.9'}, 'paul': {'age': '20', 'sexe': 'M', 'taille': '1.7'}, 'solene': {'age': '30', 'sexe': 'F', 'taille': '1.55'}}
+
+#big_brother(test_dico)
